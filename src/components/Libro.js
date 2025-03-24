@@ -15,50 +15,56 @@ const LibroList = () => {
     const [editoriales, setEditoriales] = useState([]);
     const [isUpdating, setIsUpdating] = useState(false);
 
-    // Obtener todos los libros
     useEffect(() => {
         fetchLibros();
-    }, []);
-
-    const fetchLibros = async () => {
-        const response = await fetch(`${API_URL}/libros`);
-        const data = await response.json();
-        setLibros(data);
-    };
-
-    // Obtener todos los autores
-    useEffect(() => {
-        const fetchAutores = async () => {
-            const response = await fetch(`${API_URL}/autores`);
-            const data = await response.json();
-            setAutores(data);
-        };
+        fetchEditoriales();
         fetchAutores();
     }, []);
 
-    // Obtener todas las editoriales
-    useEffect(() => {
-        const fetchEditoriales = async () => {
-            try {
-                const response = await fetch(`${API_URL}/editoriales`);
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.status} ${response.statusText}`);
-                }
-                const data = await response.json();
-                console.log("Editoriales: ", data);
-                setEditoriales(data);
-            } catch (error) {
-                console.error("Error al obtener las editoriales:", error.message);
+    const fetchLibros = async () => {
+        try {
+            const response = await fetch(`${API_URL}/libros`);
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
-        };
+            const data = await response.json();
+            setLibros(data);
+        } catch (error) {
+            console.error("Error al obtener los libros:", error.message);
+        }
+    };
 
-        fetchEditoriales();
-    }, []);
+    const fetchAutores = async () => {
+        try {
+            const response = await fetch(`${API_URL}/autores`);
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
+            const data = await response.json();
+            setAutores(data);
+        } catch (error) {
+            console.error("Error al obtener los autores:", error.message);
+        }
+    };
+
+    const fetchEditoriales = async () => {
+        try {
+            const response = await fetch(`${API_URL}/editoriales`);
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
+            const data = await response.json();
+            console.log("Editoriales: ", data);
+            setEditoriales(data);
+
+        } catch (error) {
+            console.error("Error al obtener las editoriales:", error.message);
+        }
+    };
 
 
     const handleLibroSubmit = async (e) => {
         e.preventDefault();
-        // console.log("handleLibroSubmit =>", libroForm);
 
         try {
             if (isUpdating) {
