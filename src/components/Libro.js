@@ -16,9 +16,16 @@ const LibroList = () => {
     const [isUpdating, setIsUpdating] = useState(false);
 
     useEffect(() => {
-        fetchLibros();
-        fetchEditoriales();
-        fetchAutores();
+        const fetchData = async () => {
+            try {
+                await fetchEditoriales();
+                await fetchAutores();
+                await fetchLibros();
+            } catch (error) {
+                console.error("Error al obtener los datos:", error.message);
+            }
+        };
+        fetchData();
     }, []);
 
     const fetchLibros = async () => {
