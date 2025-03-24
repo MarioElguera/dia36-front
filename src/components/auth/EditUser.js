@@ -19,7 +19,7 @@ const EditUser = () => {
         const fetchUser = async () => {
             const token = localStorage.getItem('token');
             try {
-                const response = await axios.get(`${API_URL}/usuarios/user/${userId}`, {
+                const response = await axios.get(`${API_URL}/usuarios/${userId}`, {
                     headers: { 'x-auth-token': token },
                 });
 
@@ -43,7 +43,7 @@ const EditUser = () => {
         const token = localStorage.getItem('token');
 
         try {
-            await axios.put(`${API_URL}/usuarios/users/${userId}`, user, {
+            await axios.put(`${API_URL}/usuarios/${userId}`, user, {
                 headers: { 'x-auth-token': token },
             });
             navigate('/usuarios');
@@ -87,7 +87,7 @@ const EditUser = () => {
                         // value={user.password}
                         onChange={handleChange}
                         className="w-full p-2 border border-gray-300 rounded-md"
-                        // required
+                    // required
                     />
                 </div>
 

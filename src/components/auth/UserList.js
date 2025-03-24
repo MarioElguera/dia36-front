@@ -24,7 +24,7 @@ const UserList = () => {
         const token = localStorage.getItem('token');
 
         try {
-            const response = await axios.get(`${API_URL}/usuarios/users`, {
+            const response = await axios.get(`${API_URL}/usuarios`, {
                 headers: { 'x-auth-token': token }
             });
             setUsers(response.data);
@@ -44,7 +44,7 @@ const UserList = () => {
         } else {
             try {
                 const token = localStorage.getItem('token');
-                await axios.delete(`${API_URL}/usuarios/users/${userId}`, {
+                await axios.delete(`${API_URL}/usuarios/${userId}`, {
                     headers: { 'x-auth-token': token }
                 });
                 listUsers();
