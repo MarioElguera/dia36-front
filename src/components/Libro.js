@@ -8,7 +8,7 @@ const LibroList = () => {
         libro_id: '',
         titulo: '',
         fecha_publicacion: '',
-        editorial_id: '',
+        editorial_id: 0,
         autores: []
     });
     const [autores, setAutores] = useState([]);
@@ -23,22 +23,7 @@ const LibroList = () => {
     const fetchLibros = async () => {
         const response = await fetch(`${API_URL}/libros`);
         const data = await response.json();
-
-        // Transformamos los datos para dividir los libros con más de un autor
-        const librosConAutoresSeparados = data.flatMap(libro =>
-            libro.autores.map(autor => ({
-                libro_id: libro.libro_id,
-                titulo: libro.titulo,
-                fecha_publicacion: libro.fecha_publicacion,
-                editorial_id: libro.editorial_id,
-                autor_id: autor.autor_id,
-                autor_nombre: autor.nombre,
-                nacionalidad: autor.nacionalidad,
-                fecha_nacimiento: autor.fecha_nacimiento
-            }))
-        );
-
-        setLibros(librosConAutoresSeparados);
+        setLibros(data);
     };
 
     // Obtener todos los autores
@@ -61,47 +46,60 @@ const LibroList = () => {
         fetchEditoriales();
     }, []);
 
-    // Crear o actualizar libro
     const handleLibroSubmit = async (e) => {
         e.preventDefault();
-        console.log("handleLibroSubmit =>", libroForm);
-        if (isUpdating) {
-            await fetch(`${API_URL}/libros/${libroForm.libro_id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(libroForm),
-            });
-            setIsUpdating(false);
-        } else {
-            await fetch(`${API_URL}/libros`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(libroForm),
-            });
-        }
+        // console.log("handleLibroSubmit =>", libroForm);
 
-        setLibroForm({ libro_id: '', titulo: '', fecha_publicacion: '', editorial_id: '', autores: [] });
-        const response = await fetch(`${API_URL}/libros`);
-        const data = await response.json();
-        console.log("Mario | data: ", data);
-        fetchLibros();
+        try {
+            if (isUpdating) {
+                const response = await fetch(`${API_URL}/libros/${libroForm.libro_id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(libroForm),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error al actualizar el libro');
+                }
+
+                setIsUpdating(false);
+
+            } else {
+                const response = await fetch(`${API_URL}/libros`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(libroForm),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error al crear el libro');
+                }
+            }
+
+            // Limpiar el formulario
+            setLibroForm({ libro_id: '', titulo: '', fecha_publicacion: '', editorial_id: 0, autores: [] });
+            fetchLibros();
+
+        } catch (error) {
+            console.error("Error en el proceso de creación o actualización:", error);
+        }
     };
+
 
     // Manejar la edición de un libro
     const handleEditLibro = (libro) => {
-        const autoresDelLibro = libros.filter(libroItem => libroItem.libro_id === libro.libro_id);
-        const autorIds = autoresDelLibro.map(item => item.autor_id);
+        const autoresDelLibro = libro.autores.map(autor => autor.autor_id);
 
         setLibroForm({
             libro_id: libro.libro_id,
             titulo: libro.titulo,
             fecha_publicacion: formattedDate(libro.fecha_publicacion),
             editorial_id: libro.editorial_id,
-            autores: autorIds,
+            autores: autoresDelLibro,
         });
         setIsUpdating(true);
     };
@@ -111,9 +109,7 @@ const LibroList = () => {
         await fetch(`${API_URL}/libros/${id}`, {
             method: 'DELETE',
         });
-        const response = await fetch(`${API_URL}/libros`);
-        const data = await response.json();
-        setLibros(data);
+        fetchLibros();
     };
 
     const formattedDate = (date) => {
@@ -180,6 +176,9 @@ const LibroList = () => {
                         onChange={(e) => setLibroForm({ ...libroForm, editorial_id: e.target.value })}
                         className="w-full px-4 py-2 border rounded-lg"
                     >
+                        <option key={0} value="0">
+                            {"Seleccionar editorial"}
+                        </option>
                         {editoriales.map((editorial) => (
                             <option key={editorial.editorial_id} value={editorial.editorial_id}>
                                 {editorial.nombre}
@@ -204,37 +203,50 @@ const LibroList = () => {
 
                 {libros.map((libro) => (
                     <li
-                        key={`${libro.libro_id}-${libro.autor_id}`}
-                        className="flex justify-between items-center p-4 bg-gray-100 rounded-md shadow-md"
+                        key={libro.libro_id}
+                        className="flex flex-col bg-white rounded-lg shadow-md p-6 mb-6"
                     >
-                        <div className="border p-4 rounded shadow-md">
-                            <p className="font-semibold text-lg">{libro.titulo}</p>
+                        {/* Título y detalles principales del libro */}
+                        <div className="mb-4">
+                            <h3 className="font-semibold text-2xl text-gray-800">{libro.titulo}</h3>
                             <p className="text-sm text-gray-500">Publicado: {formattedDate(libro.fecha_publicacion)}</p>
-                            <p className="text-sm text-gray-500">Editorial ID: {libro.editorial_id}</p>
-                            <hr className="my-2 border-gray-300" />
-                            <p className="font-medium">Autor: {libro.autor_nombre}</p>
-                            <p className="text-sm text-gray-500">Nacionalidad: {libro.nacionalidad}</p>
-                            <p className="text-sm text-gray-500">Fecha de Nacimiento: {formattedDate(libro.fecha_nacimiento)}</p>
+                            <p className="text-sm text-gray-500">Editorial: {libro.editorial_id}</p>
                         </div>
 
-                        <div className="space-x-2">
+                        {/* Lista de autores */}
+                        <div className="mb-4">
+                            <p className="font-medium text-lg text-gray-800">Autores:</p>
+                            <ul className="list-disc pl-5 space-y-2">
+                                {libro.autores.map((autor) => (
+                                    <li key={autor.autor_id} className="text-sm text-gray-600">
+                                        <p className="font-semibold">{autor.nombre}</p>
+                                        <p className="text-gray-500">Nacionalidad: {autor.nacionalidad}</p>
+                                        <p className="text-gray-500">Fecha de nacimiento: {formattedDate(autor.fecha_nacimiento)}</p>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        <div className="flex space-x-4">
+                            {/* Botones de editar y eliminar */}
                             <button
                                 onClick={() => handleEditLibro(libro)}
-                                className="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition duration-300"
+                                className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-300"
                             >
                                 Editar
                             </button>
                             <button
                                 onClick={() => handleDeleteLibro(libro.libro_id)}
-                                className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-300"
+                                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-300"
                             >
                                 Eliminar
                             </button>
                         </div>
                     </li>
                 ))}
+
             </ul>
-        </div>
+        </div >
     );
 };
 

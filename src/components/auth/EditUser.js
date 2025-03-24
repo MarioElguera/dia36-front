@@ -25,7 +25,6 @@ const EditUser = () => {
 
                 setUser({
                     username: response.data.username,
-                    password: response.data.password,
                     isAdmin: response.data.isAdmin,
                 });
 
@@ -41,12 +40,14 @@ const EditUser = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem('token');
+        console.log("handleSubmit | user: ", user);
 
         try {
             await axios.put(`${API_URL}/usuarios/${userId}`, user, {
                 headers: { 'x-auth-token': token },
             });
             navigate('/usuarios');
+
         } catch (error) {
             setErrorMessage('Error al actualizar el usuario.');
         }
@@ -61,7 +62,7 @@ const EditUser = () => {
     };
 
     return (
-        <div className="container mx-auto p-6">
+        <div className="max-w-2xl mx-auto p-4">
             <h2 className="text-2xl font-bold mb-4">Editar Usuario</h2>
 
             {errorMessage && <div className="text-red-500 text-center mb-4">{errorMessage}</div>}
@@ -87,7 +88,7 @@ const EditUser = () => {
                         // value={user.password}
                         onChange={handleChange}
                         className="w-full p-2 border border-gray-300 rounded-md"
-                    // required
+                        required
                     />
                 </div>
 

@@ -68,7 +68,7 @@ const EditorialList = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto p-4">
+        <div className="max-w-2xl mx-auto p-4">
 
             {/* Formulario Crear/Actualizar Editorial */}
             <form onSubmit={handleEditorialSubmit} className="bg-white p-6 rounded-lg shadow-lg space-y-4">
