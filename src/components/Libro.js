@@ -39,12 +39,22 @@ const LibroList = () => {
     // Obtener todas las editoriales
     useEffect(() => {
         const fetchEditoriales = async () => {
-            const response = await fetch(`${API_URL}/editoriales`);
-            const data = await response.json();
-            setEditoriales(data);
+            try {
+                const response = await fetch(`${API_URL}/editoriales`);
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+                const data = await response.json();
+                console.log("Editoriales: ", data);
+                setEditoriales(data);
+            } catch (error) {
+                console.error("Error al obtener las editoriales:", error.message);
+            }
         };
+
         fetchEditoriales();
     }, []);
+
 
     const handleLibroSubmit = async (e) => {
         e.preventDefault();
