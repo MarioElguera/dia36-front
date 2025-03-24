@@ -19,14 +19,10 @@ const Login = ({ onLogin }) => {
                 password
             });
 
-            // Si el login es exitoso, guardamos el token y actualizamos el estado de autenticación en App
             localStorage.setItem('token', response.data.token);
-
-            // Llamamos a onLogin que actualizará el estado de autenticación en App
             onLogin();
-
-            // Redirigir al usuario a la página de inicio
             navigate('/home');
+
         } catch (error) {
             setErrorMessage('Credenciales incorrectas');
         }

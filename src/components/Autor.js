@@ -35,7 +35,7 @@ const AutorList = () => {
             setSelectedAutor(null);
         } else {
             // Crear autor
-            await fetch('${API_URL}/autores', {
+            await fetch(`${API_URL}/autores`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
