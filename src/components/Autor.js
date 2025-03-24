@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+
 const AutorList = () => {
     const [autores, setAutores] = useState([]);
     const [newAutor, setNewAutor] = useState({ nombre: '', nacionalidad: '', fecha_nacimiento: '' });
@@ -9,7 +11,7 @@ const AutorList = () => {
     // Obtener todos los autores
     useEffect(() => {
         const fetchAutores = async () => {
-            const response = await fetch('http://localhost:3000/autores');
+            const response = await fetch(`${API_URL}/autores`);
             const data = await response.json();
             setAutores(data);
         };
@@ -22,7 +24,7 @@ const AutorList = () => {
 
         if (isUpdateMode && selectedAutor) {
             // Actualizar autor
-            await fetch(`http://localhost:3000/autores/${selectedAutor.autor_id}`, {
+            await fetch(`${API_URL}/autores/${selectedAutor.autor_id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -33,7 +35,7 @@ const AutorList = () => {
             setSelectedAutor(null);
         } else {
             // Crear autor
-            await fetch('http://localhost:3000/autores', {
+            await fetch('${API_URL}/autores', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -44,17 +46,17 @@ const AutorList = () => {
 
         // Limpiar formulario y volver a cargar los autores
         setNewAutor({ nombre: '', nacionalidad: '', fecha_nacimiento: '' });
-        const response = await fetch('http://localhost:3000/autores');
+        const response = await fetch(`${API_URL}/autores`);
         const data = await response.json();
         setAutores(data);
     };
 
     // Eliminar un autor
     const handleDeleteAutor = async (id) => {
-        await fetch(`http://localhost:3000/autores/${id}`, {
+        await fetch(`${API_URL}/autores/${id}`, {
             method: 'DELETE',
         });
-        const response = await fetch('http://localhost:3000/autores');
+        const response = await fetch(`${API_URL}/autores`);
         const data = await response.json();
         setAutores(data);
     };

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 // Definir la URL base de la API
-const API_URL = 'http://localhost:3000'; // Cambia esta URL según tu configuración
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
 const Register = () => {
     const [username, setUsername] = useState('');

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+
 const AutoresLibros = () => {
     const [autoresLibros, setAutoresLibros] = useState([]);
     const [autorId, setAutorId] = useState('');
@@ -8,14 +10,14 @@ const AutoresLibros = () => {
     const [newLibroId, setNewLibroId] = useState('');
 
     useEffect(() => {
-        fetch('http://localhost:3000/autores_libros')
+        fetch(`${API_URL}/autores_libros`)
             .then((response) => response.json())
             .then((data) => setAutoresLibros(data))
             .catch((error) => console.error('Error fetching autores-libros:', error));
     }, []);
 
     const handleCreate = () => {
-        fetch('http://localhost:3000/autores_libros', {
+        fetch(`${API_URL}/autores_libros`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -35,7 +37,7 @@ const AutoresLibros = () => {
     };
 
     const handleUpdate = (autor_id, libro_id) => {
-        fetch(`http://localhost:3000/autores_libros/${autor_id}/${libro_id}`, {
+        fetch(`${API_URL}/autores_libros/${autor_id}/${libro_id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -59,7 +61,7 @@ const AutoresLibros = () => {
     };
 
     const handleDelete = (autor_id, libro_id) => {
-        fetch(`http://localhost:3000/autores_libros/${autor_id}/${libro_id}`, {
+        fetch(`${API_URL}/autores_libros/${autor_id}/${libro_id}`, {
             method: 'DELETE',
         })
             .then(() => {

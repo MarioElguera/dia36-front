@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+
 const EditorialList = () => {
     const [editoriales, setEditoriales] = useState([]);
     const [editorialForm, setEditorialForm] = useState({ editorial_id: '', nombre: '', pais: '' });
@@ -8,7 +10,7 @@ const EditorialList = () => {
     // Obtener todas las editoriales
     useEffect(() => {
         const fetchEditoriales = async () => {
-            const response = await fetch('http://localhost:3000/editoriales');
+            const response = await fetch(`${API_URL}/editoriales`);
             const data = await response.json();
             setEditoriales(data);
         };
@@ -20,7 +22,7 @@ const EditorialList = () => {
         e.preventDefault();
 
         if (isUpdating) {
-            await fetch(`http://localhost:3000/editoriales/${editorialForm.editorial_id}`, {
+            await fetch(`${API_URL}/editoriales/${editorialForm.editorial_id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -30,7 +32,7 @@ const EditorialList = () => {
             setIsUpdating(false);
 
         } else {
-            await fetch('http://localhost:3000/editoriales', {
+            await fetch(`${API_URL}/editoriales`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -40,7 +42,7 @@ const EditorialList = () => {
         }
 
         setEditorialForm({ editorial_id: '', nombre: '', pais: '' });
-        const response = await fetch('http://localhost:3000/editoriales');
+        const response = await fetch(`${API_URL}/editoriales`);
         const data = await response.json();
         setEditoriales(data);
     };
@@ -57,10 +59,10 @@ const EditorialList = () => {
 
     // Eliminar una editorial
     const handleDeleteEditorial = async (id) => {
-        await fetch(`http://localhost:3000/editoriales/${id}`, {
+        await fetch(`${API_URL}/editoriales/${id}`, {
             method: 'DELETE',
         });
-        const response = await fetch('http://localhost:3000/editoriales');
+        const response = await fetch(`${API_URL}/editoriales`);
         const data = await response.json();
         setEditoriales(data);
     };

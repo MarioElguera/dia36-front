@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+
 const LibroList = () => {
     const [libros, setLibros] = useState([]);
     const [libroForm, setLibroForm] = useState({
@@ -19,7 +21,7 @@ const LibroList = () => {
     }, []);
 
     const fetchLibros = async () => {
-        const response = await fetch('http://localhost:3000/libros');
+        const response = await fetch(`${API_URL}/libros`);
         const data = await response.json();
 
         // Transformamos los datos para dividir los libros con más de un autor
@@ -42,7 +44,7 @@ const LibroList = () => {
     // Obtener todos los autores
     useEffect(() => {
         const fetchAutores = async () => {
-            const response = await fetch('http://localhost:3000/autores');
+            const response = await fetch(`${API_URL}/autores`);
             const data = await response.json();
             setAutores(data);
         };
@@ -52,7 +54,7 @@ const LibroList = () => {
     // Obtener todas las editoriales
     useEffect(() => {
         const fetchEditoriales = async () => {
-            const response = await fetch('http://localhost:3000/editoriales');
+            const response = await fetch(`${API_URL}/editoriales`);
             const data = await response.json();
             setEditoriales(data);
         };
@@ -64,7 +66,7 @@ const LibroList = () => {
         e.preventDefault();
         console.log("handleLibroSubmit =>", libroForm);
         if (isUpdating) {
-            await fetch(`http://localhost:3000/libros/${libroForm.libro_id}`, {
+            await fetch(`${API_URL}/libros/${libroForm.libro_id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -73,7 +75,7 @@ const LibroList = () => {
             });
             setIsUpdating(false);
         } else {
-            await fetch('http://localhost:3000/libros', {
+            await fetch(`${API_URL}/libros`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -83,7 +85,7 @@ const LibroList = () => {
         }
 
         setLibroForm({ libro_id: '', titulo: '', fecha_publicacion: '', editorial_id: '', autores: [] });
-        const response = await fetch('http://localhost:3000/libros');
+        const response = await fetch(`${API_URL}/libros`);
         const data = await response.json();
         console.log("Mario | data: ", data);
         fetchLibros();
@@ -106,10 +108,10 @@ const LibroList = () => {
 
     // Eliminar un libro
     const handleDeleteLibro = async (id) => {
-        await fetch(`http://localhost:3000/libros/${id}`, {
+        await fetch(`${API_URL}/libros/${id}`, {
             method: 'DELETE',
         });
-        const response = await fetch('http://localhost:3000/libros');
+        const response = await fetch(`${API_URL}/libros`);
         const data = await response.json();
         setLibros(data);
     };

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+
 const Login = ({ onLogin }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -12,7 +14,7 @@ const Login = ({ onLogin }) => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:3000/auth/login', {
+            const response = await axios.post(`${API_URL}/auth/login`, {
                 username,
                 password
             });

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+
 const VentaList = () => {
     const [ventas, setVentas] = useState([]);
     const [libros, setLibros] = useState([]);
@@ -15,7 +17,7 @@ const VentaList = () => {
     // Obtener todas las ventas
     useEffect(() => {
         const fetchVentas = async () => {
-            const response = await fetch('http://localhost:3000/ventas');
+            const response = await fetch(`${API_URL}/ventas`);
             const data = await response.json();
             setVentas(data);
         };
@@ -25,7 +27,7 @@ const VentaList = () => {
     // Obtener todos los libros
     useEffect(() => {
         const fetchLibros = async () => {
-            const response = await fetch('http://localhost:3000/libros');
+            const response = await fetch(`${API_URL}/libros`);
             const data = await response.json();
             setLibros(data);
         };
@@ -36,8 +38,8 @@ const VentaList = () => {
     const handleSaveVenta = async (e) => {
         e.preventDefault();
         const url = ventaId
-            ? `http://localhost:3000/ventas/${ventaId}`
-            : 'http://localhost:3000/ventas';
+            ? `${API_URL}/ventas/${ventaId}`
+            : `${API_URL}/ventas`;
 
         const method = ventaId ? 'PUT' : 'POST';
 
@@ -58,17 +60,17 @@ const VentaList = () => {
         });
         setVentaId(null);
 
-        const response = await fetch('http://localhost:3000/ventas');
+        const response = await fetch(`${API_URL}/ventas`);
         const data = await response.json();
         setVentas(data);
     };
 
     // Eliminar una venta
     const handleDeleteVenta = async (id) => {
-        await fetch(`http://localhost:3000/ventas/${id}`, {
+        await fetch(`${API_URL}/ventas/${id}`, {
             method: 'DELETE',
         });
-        const response = await fetch('http://localhost:3000/ventas');
+        const response = await fetch(`${API_URL}/ventas`);
         const data = await response.json();
         setVentas(data);
     };
