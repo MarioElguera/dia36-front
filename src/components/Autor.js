@@ -11,7 +11,12 @@ const AutorList = () => {
     // Obtener todos los autores
     useEffect(() => {
         const fetchAutores = async () => {
-            const response = await fetch(`${API_URL}/autores`);
+            const response = await fetch(`${API_URL}/autores`, {
+                method: 'GET',
+                headers: {
+                    'x-auth-token': token // Agregamos el header con el token
+                }
+            });
             const data = await response.json();
             setAutores(data);
         };
@@ -21,13 +26,14 @@ const AutorList = () => {
     // Manejar la creación o actualización de un autor
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        const token = localStorage.getItem('token');
         if (isUpdateMode && selectedAutor) {
             // Actualizar autor
             await fetch(`${API_URL}/autores/${selectedAutor.autor_id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'x-auth-token': token
                 },
                 body: JSON.stringify(newAutor),
             });
@@ -39,6 +45,7 @@ const AutorList = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'x-auth-token': token
                 },
                 body: JSON.stringify(newAutor),
             });
@@ -46,7 +53,12 @@ const AutorList = () => {
 
         // Limpiar formulario y volver a cargar los autores
         setNewAutor({ nombre: '', nacionalidad: '', fecha_nacimiento: '' });
-        const response = await fetch(`${API_URL}/autores`);
+        const response = await fetch(`${API_URL}/autores`, {
+            method: 'GET', // Puedes omitir esto ya que 'GET' es el método por defecto, pero lo dejo por claridad
+            headers: {
+                'x-auth-token': token // Agregamos el header con el token
+            }
+        });
         const data = await response.json();
         setAutores(data);
     };
@@ -55,8 +67,17 @@ const AutorList = () => {
     const handleDeleteAutor = async (id) => {
         await fetch(`${API_URL}/autores/${id}`, {
             method: 'DELETE',
+            headers: {
+                'x-auth-token': token
+            }
         });
-        const response = await fetch(`${API_URL}/autores`);
+
+        const response = await fetch(`${API_URL}/autores`, {
+            method: 'GET', // Puedes omitir esto ya que 'GET' es el método por defecto, pero lo dejo por claridad
+            headers: {
+                'x-auth-token': token // Agregamos el header con el token
+            }
+        });
         const data = await response.json();
         setAutores(data);
     };
