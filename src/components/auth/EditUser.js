@@ -88,7 +88,7 @@ const EditUser = () => {
                         // value={user.password}
                         onChange={handleChange}
                         className="w-full p-2 border border-gray-300 rounded-md"
-                        required
+                        // required
                     />
                 </div>
 
