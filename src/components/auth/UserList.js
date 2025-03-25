@@ -54,6 +54,14 @@ const UserList = () => {
         }
     };
 
+    const isAdmin = () => {
+        const token = localStorage.getItem('token');
+        if (!token) return false;
+
+        const decoded = JSON.parse(atob(token.split('.')[1]));
+        return decoded.isAdmin;
+    };
+
     const handleEditUser = (userId) => {
         navigate(`/usuarios/editar/${userId}`);
     };
@@ -98,7 +106,10 @@ const UserList = () => {
                             <td className="p-2 border-b flex justify-around">
                                 <button
                                     onClick={() => handleEditUser(user.id)}
-                                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                                    disabled={!isAdmin()}
+                                    className={`${!isAdmin()
+                                        ? "bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-200 cursor-not-allowed opacity-50"
+                                        : "bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"}`}
                                 >
                                     Editar
                                 </button>
