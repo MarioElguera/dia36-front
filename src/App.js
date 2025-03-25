@@ -36,16 +36,22 @@ const AdminRoute = ({ element, ...rest }) => {
 };
 
 const App = () => {
-  const [authenticated, setAuthenticated] = useState(isAuthenticated());
+  const [authenticated, setAuthenticated] = useState(null); // Inicializamos el estado en null para evitar renderizados prematuros
+
+  // Verificamos el estado de autenticación antes de que se renderice la app
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setAuthenticated(token ? true : false); // Si hay token, se considera autenticado
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    setAuthenticated(false);
+    setAuthenticated(false); // Al hacer logout, actualizamos el estado
   };
 
-  useEffect(() => {
-    setAuthenticated(isAuthenticated());
-  }, []);
+  if (authenticated === null) {
+    return <div>Loading...</div>; // Mientras se verifica la autenticación, mostramos un loading
+  }
 
   return (
     <Router>
