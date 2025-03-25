@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import AutorList from './components/Autor';
 import LibroList from './components/Libro';
@@ -41,7 +41,6 @@ const App = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setAuthenticated(false);
-    return <Navigate to="/login" />;
   };
 
   useEffect(() => {
@@ -54,7 +53,8 @@ const App = () => {
 
       <div>
         <Routes>
-          <Route path="/" element={<Navigate to="/login" />} />
+          {/* Si el usuario está autenticado, redirige a '/home'. Si no, a '/login' */}
+          <Route path="/" element={authenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
 
           <Route path="/login" element={<Login onLogin={() => setAuthenticated(true)} />} />
           <Route path="/register" element={<Register />} />
