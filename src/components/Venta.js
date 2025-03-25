@@ -16,56 +16,62 @@ const VentaList = () => {
     const [ventaId, setVentaId] = useState(null);
 
     // Obtener todas las ventas
-    useEffect(() => {
-        const fetchVentas = async () => {
-            try {
-                const response = await fetch(`${API_URL}/ventas`, {
-                    method: 'GET',
-                    headers: {
-                        'x-auth-token': token,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+    const fetchVentas = async () => {
+        try {
+            const response = await fetch(`${API_URL}/ventas`, {
+                method: 'GET',
+                headers: {
+                    'x-auth-token': token,
+                    'Content-Type': 'application/json'
                 }
+            });
 
-                const data = await response.json();
-                setVentas(data);
-
-            } catch (error) {
-                console.error("Error al obtener las ventas:", error.message);
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
-        };
 
-        fetchVentas();
-    }, []);
+            const data = await response.json();
+            setVentas(data);
+
+        } catch (error) {
+            console.error("Error al obtener las ventas:", error.message);
+        }
+    };
 
     // Obtener todos los libros
-    useEffect(() => {
-        const fetchLibros = async () => {
-            try {
-                const response = await fetch(`${API_URL}/libros`, {
-                    method: 'GET',
-                    headers: {
-                        'x-auth-token': token,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+    const fetchLibros = async () => {
+        try {
+            const response = await fetch(`${API_URL}/libros`, {
+                method: 'GET',
+                headers: {
+                    'x-auth-token': token,
+                    'Content-Type': 'application/json'
                 }
+            });
 
-                const data = await response.json();
-                setLibros(data);
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            setLibros(data);
+
+        } catch (error) {
+            console.error("Error al obtener los libros:", error.message);
+        }
+    };
+
+    useEffect(async () => {
+        const fetchData = async () => {
+            try {
+                await fetchLibros();
+                await fetchVentas();
 
             } catch (error) {
-                console.error("Error al obtener los libros:", error.message);
+                console.error("Error al obtener los datos:", error.message);
             }
         };
-        fetchLibros();
+        fetchData();
     }, []);
 
     // Crear o actualizar una venta
