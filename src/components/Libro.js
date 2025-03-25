@@ -32,24 +32,21 @@ const LibroList = () => {
     const fetchLibros = async () => {
         try {
             const response = await fetch(`${API_URL}/libros`, {
-                method: 'GET', // Opcional, ya que 'GET' es el método por defecto
+                method: 'GET',
                 headers: {
-                    'x-auth-token': token, // Aquí agregamos el token
-                    'Content-Type': 'application/json' // Opcional, dependiendo de la API
+                    'x-auth-token': token,
+                    'Content-Type': 'application/json'
                 }
             });
 
-            // Verificar si la respuesta fue exitosa
             if (!response.ok) {
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
 
-            // Si la respuesta es correcta, parseamos el JSON y actualizamos el estado
             const data = await response.json();
             setLibros(data);
 
         } catch (error) {
-            // Si ocurre un error, lo mostramos en la consola
             console.error("Error al obtener los libros:", error.message);
         }
 
@@ -58,24 +55,21 @@ const LibroList = () => {
     const fetchAutores = async () => {
         try {
             const response = await fetch(`${API_URL}/autores`, {
-                method: 'GET', // Esto es opcional, ya que 'GET' es el método por defecto
+                method: 'GET',
                 headers: {
-                    'x-auth-token': token, // Aquí agregamos el token
-                    'Content-Type': 'application/json' // Opcional, dependiendo de la API
+                    'x-auth-token': token,
+                    'Content-Type': 'application/json'
                 }
             });
 
-            // Verificar si la respuesta fue exitosa
             if (!response.ok) {
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
 
-            // Si todo es correcto, parseamos el JSON y actualizamos el estado
             const data = await response.json();
             setAutores(data);
 
         } catch (error) {
-            // Si ocurre un error, lo mostramos en la consola
             console.error("Error al obtener los autores:", error.message);
         }
     };
@@ -83,24 +77,21 @@ const LibroList = () => {
     const fetchEditoriales = async () => {
         try {
             const response = await fetch(`${API_URL}/editoriales`, {
-                method: 'GET', // Esto es opcional ya que 'GET' es el método por defecto
+                method: 'GET',
                 headers: {
-                    'x-auth-token': token, // Agregamos el token al encabezado
-                    'Content-Type': 'application/json' // Esto es opcional, dependiendo de la API
+                    'x-auth-token': token,
+                    'Content-Type': 'application/json'
                 }
             });
 
-            // Verificar si la respuesta fue exitosa
             if (!response.ok) {
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
 
-            // Si todo es correcto, parseamos el JSON y actualizamos el estado
             const data = await response.json();
             setEditoriales(data);
 
         } catch (error) {
-            // Si ocurre un error, lo mostramos en la consola
             console.error("Error al obtener las editoriales:", error.message);
         }
     };
@@ -139,7 +130,6 @@ const LibroList = () => {
                 }
             }
 
-            // Limpiar el formulario
             setLibroForm({ libro_id: '', titulo: '', fecha_publicacion: '', editorial_id: 0, autores: [] });
             fetchLibros();
 

@@ -36,21 +36,20 @@ const AdminRoute = ({ element, ...rest }) => {
 };
 
 const App = () => {
-  const [authenticated, setAuthenticated] = useState(null); // Inicializamos el estado en null para evitar renderizados prematuros
+  const [authenticated, setAuthenticated] = useState(null);
 
-  // Verificamos el estado de autenticación antes de que se renderice la app
   useEffect(() => {
     const token = localStorage.getItem('token');
-    setAuthenticated(token ? true : false); // Si hay token, se considera autenticado
+    setAuthenticated(token ? true : false);
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    setAuthenticated(false); // Al hacer logout, actualizamos el estado
+    setAuthenticated(false);
   };
 
   if (authenticated === null) {
-    return <div>Loading...</div>; // Mientras se verifica la autenticación, mostramos un loading
+    return <div>Loading...</div>;
   }
 
   return (
@@ -59,7 +58,6 @@ const App = () => {
 
       <div>
         <Routes>
-          {/* Si el usuario está autenticado, redirige a '/home'. Si no, a '/login' */}
           <Route path="/" element={authenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
 
           <Route path="/login" element={<Login onLogin={() => setAuthenticated(true)} />} />

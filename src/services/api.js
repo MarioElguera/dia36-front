@@ -1,7 +1,6 @@
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
-// Funciones de Autor
 export const crearAutor = async (autorData) => {
     try {
         const response = await fetch(`${API_URL}/autores`, {
@@ -34,7 +33,6 @@ export const getAutores = async () => {
     }
 };
 
-// Funciones de Libro
 export const crearLibro = async (libroData) => {
     try {
         const response = await fetch(`${API_URL}/libros`, {
@@ -115,7 +113,6 @@ export const eliminarLibro = async (libroId) => {
     }
 };
 
-// Funciones de Venta
 export const crearVenta = async (ventaData) => {
     try {
         const response = await fetch(`${API_URL}/ventas`, {

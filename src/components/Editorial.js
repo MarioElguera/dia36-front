@@ -12,9 +12,9 @@ const EditorialList = () => {
     useEffect(() => {
         const fetchEditoriales = async () => {
             const response = await fetch(`${API_URL}/editoriales`, {
-                method: 'GET', // Opcional, ya que 'GET' es el método por defecto
+                method: 'GET',
                 headers: {
-                    'x-auth-token': token // Agregamos el header con el token
+                    'x-auth-token': token
                 }
             });
             const data = await response.json();
@@ -52,10 +52,10 @@ const EditorialList = () => {
 
         setEditorialForm({ editorial_id: '', nombre: '', pais: '' });
         const response = await fetch(`${API_URL}/editoriales`, {
-            method: 'GET', // Si es una solicitud GET
+            method: 'GET',
             headers: {
-                'x-auth-token': token, // Aquí agregas el token
-                'Content-Type': 'application/json' // Esto es opcional dependiendo de la API
+                'x-auth-token': token,
+                'Content-Type': 'application/json'
             }
         });
         const data = await response.json();
@@ -79,10 +79,10 @@ const EditorialList = () => {
             headers: { 'x-auth-token': token },
         });
         const response = await fetch(`${API_URL}/editoriales`, {
-            method: 'GET', // Si es una solicitud GET
+            method: 'GET',
             headers: {
-                'x-auth-token': token, // Aquí agregas el token
-                'Content-Type': 'application/json' // Esto es opcional dependiendo de la API
+                'x-auth-token': token,
+                'Content-Type': 'application/json'
             }
         });
         const data = await response.json();

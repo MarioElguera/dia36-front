@@ -15,7 +15,7 @@ const AutorList = () => {
             const response = await fetch(`${API_URL}/autores`, {
                 method: 'GET',
                 headers: {
-                    'x-auth-token': token // Agregamos el header con el token
+                    'x-auth-token': token
                 }
             });
             const data = await response.json();
@@ -29,7 +29,6 @@ const AutorList = () => {
         e.preventDefault();
         const token = localStorage.getItem('token');
         if (isUpdateMode && selectedAutor) {
-            // Actualizar autor
             await fetch(`${API_URL}/autores/${selectedAutor.autor_id}`, {
                 method: 'PUT',
                 headers: {
@@ -52,12 +51,11 @@ const AutorList = () => {
             });
         }
 
-        // Limpiar formulario y volver a cargar los autores
         setNewAutor({ nombre: '', nacionalidad: '', fecha_nacimiento: '' });
         const response = await fetch(`${API_URL}/autores`, {
-            method: 'GET', // Puedes omitir esto ya que 'GET' es el método por defecto, pero lo dejo por claridad
+            method: 'GET',
             headers: {
-                'x-auth-token': token // Agregamos el header con el token
+                'x-auth-token': token
             }
         });
         const data = await response.json();
@@ -74,9 +72,9 @@ const AutorList = () => {
         });
 
         const response = await fetch(`${API_URL}/autores`, {
-            method: 'GET', // Puedes omitir esto ya que 'GET' es el método por defecto, pero lo dejo por claridad
+            method: 'GET',
             headers: {
-                'x-auth-token': token // Agregamos el header con el token
+                'x-auth-token': token
             }
         });
         const data = await response.json();
@@ -88,13 +86,12 @@ const AutorList = () => {
         setIsUpdateMode(true);
         setSelectedAutor(autor);
 
-        // Asegúrate de que la fecha esté en el formato correcto (YYYY-MM-DD)
         const fechaNacimientoFormatted = new Date(autor.fecha_nacimiento).toISOString().split('T')[0];
 
         setNewAutor({
             nombre: autor.nombre,
             nacionalidad: autor.nacionalidad,
-            fecha_nacimiento: fechaNacimientoFormatted, // Asignamos la fecha formateada correctamente
+            fecha_nacimiento: fechaNacimientoFormatted,
         });
     };
 

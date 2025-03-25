@@ -20,24 +20,21 @@ const VentaList = () => {
         const fetchVentas = async () => {
             try {
                 const response = await fetch(`${API_URL}/ventas`, {
-                    method: 'GET', // Opcional, ya que 'GET' es el método por defecto
+                    method: 'GET',
                     headers: {
-                        'x-auth-token': token, // Aquí agregamos el token
-                        'Content-Type': 'application/json' // Opcional, dependiendo de la API
+                        'x-auth-token': token,
+                        'Content-Type': 'application/json'
                     }
                 });
 
-                // Verificar si la respuesta fue exitosa
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status} ${response.statusText}`);
                 }
 
-                // Si la respuesta es correcta, parseamos el JSON y actualizamos el estado
                 const data = await response.json();
                 setVentas(data);
 
             } catch (error) {
-                // Si ocurre un error, lo mostramos en la consola
                 console.error("Error al obtener las ventas:", error.message);
             }
         };
@@ -50,24 +47,21 @@ const VentaList = () => {
         const fetchLibros = async () => {
             try {
                 const response = await fetch(`${API_URL}/libros`, {
-                    method: 'GET', // Opcional, ya que 'GET' es el método por defecto
+                    method: 'GET',
                     headers: {
-                        'x-auth-token': token, // Aquí agregamos el token
-                        'Content-Type': 'application/json' // Opcional, dependiendo de la API
+                        'x-auth-token': token,
+                        'Content-Type': 'application/json'
                     }
                 });
 
-                // Verificar si la respuesta fue exitosa
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status} ${response.statusText}`);
                 }
 
-                // Si la respuesta es correcta, parseamos el JSON y actualizamos el estado
                 const data = await response.json();
                 setLibros(data);
 
             } catch (error) {
-                // Si ocurre un error, lo mostramos en la consola
                 console.error("Error al obtener los libros:", error.message);
             }
         };
@@ -101,10 +95,10 @@ const VentaList = () => {
         setVentaId(null);
 
         const response = await fetch(`${API_URL}/ventas`, {
-            method: 'GET', // Opcional, 'GET' es el método por defecto
+            method: 'GET',
             headers: {
-                'x-auth-token': token, // Aquí agregamos el token
-                'Content-Type': 'application/json' // Opcional, dependiendo de la API
+                'x-auth-token': token,
+                'Content-Type': 'application/json'
             }
         });
 
@@ -117,15 +111,15 @@ const VentaList = () => {
         await fetch(`${API_URL}/ventas/${id}`, {
             method: 'DELETE',
             headers: {
-                'x-auth-token': token, // Aquí agregamos el token
-                'Content-Type': 'application/json' // Opcional, dependiendo de la API
+                'x-auth-token': token,
+                'Content-Type': 'application/json'
             }
         });
         const response = await fetch(`${API_URL}/ventas`, {
-            method: 'GET', // Opcional, 'GET' es el método por defecto
+            method: 'GET',
             headers: {
-                'x-auth-token': token, // Aquí agregamos el token
-                'Content-Type': 'application/json' // Opcional, dependiendo de la API
+                'x-auth-token': token,
+                'Content-Type': 'application/json'
             }
         });
 
@@ -133,7 +127,6 @@ const VentaList = () => {
         setVentas(data);
     };
 
-    // Manejar el clic en "Actualizar" y cargar los datos al formulario
     const handleEditVenta = (venta) => {
         setVentaId(venta.venta_id);
         setNewVenta({

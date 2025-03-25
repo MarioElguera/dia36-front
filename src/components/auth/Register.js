@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-// Definir la URL base de la API
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
 const Register = () => {
@@ -32,7 +31,6 @@ const Register = () => {
             setSuccessMessage('Usuario registrado con éxito');
             setErrorMessage('');
 
-            // Redirigir al login después de registrar el usuario
             setTimeout(() => {
                 navigate('/home');
             }, 1000);
