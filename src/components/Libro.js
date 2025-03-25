@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+const token = localStorage.getItem('token');
 
 const LibroList = () => {
     const [libros, setLibros] = useState([]);
@@ -30,41 +31,76 @@ const LibroList = () => {
 
     const fetchLibros = async () => {
         try {
-            const response = await fetch(`${API_URL}/libros`);
+            const response = await fetch(`${API_URL}/libros`, {
+                method: 'GET', // Opcional, ya que 'GET' es el método por defecto
+                headers: {
+                    'x-auth-token': token, // Aquí agregamos el token
+                    'Content-Type': 'application/json' // Opcional, dependiendo de la API
+                }
+            });
+
+            // Verificar si la respuesta fue exitosa
             if (!response.ok) {
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
+
+            // Si la respuesta es correcta, parseamos el JSON y actualizamos el estado
             const data = await response.json();
             setLibros(data);
+
         } catch (error) {
+            // Si ocurre un error, lo mostramos en la consola
             console.error("Error al obtener los libros:", error.message);
         }
+
     };
 
     const fetchAutores = async () => {
         try {
-            const response = await fetch(`${API_URL}/autores`);
+            const response = await fetch(`${API_URL}/autores`, {
+                method: 'GET', // Esto es opcional, ya que 'GET' es el método por defecto
+                headers: {
+                    'x-auth-token': token, // Aquí agregamos el token
+                    'Content-Type': 'application/json' // Opcional, dependiendo de la API
+                }
+            });
+
+            // Verificar si la respuesta fue exitosa
             if (!response.ok) {
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
+
+            // Si todo es correcto, parseamos el JSON y actualizamos el estado
             const data = await response.json();
             setAutores(data);
+
         } catch (error) {
+            // Si ocurre un error, lo mostramos en la consola
             console.error("Error al obtener los autores:", error.message);
         }
     };
 
     const fetchEditoriales = async () => {
         try {
-            const response = await fetch(`${API_URL}/editoriales`);
+            const response = await fetch(`${API_URL}/editoriales`, {
+                method: 'GET', // Esto es opcional ya que 'GET' es el método por defecto
+                headers: {
+                    'x-auth-token': token, // Agregamos el token al encabezado
+                    'Content-Type': 'application/json' // Esto es opcional, dependiendo de la API
+                }
+            });
+
+            // Verificar si la respuesta fue exitosa
             if (!response.ok) {
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
+
+            // Si todo es correcto, parseamos el JSON y actualizamos el estado
             const data = await response.json();
-            console.log("Editoriales: ", data);
             setEditoriales(data);
 
         } catch (error) {
+            // Si ocurre un error, lo mostramos en la consola
             console.error("Error al obtener las editoriales:", error.message);
         }
     };

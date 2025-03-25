@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+const token = localStorage.getItem('token');
 
 const AutoresLibros = () => {
     const [autoresLibros, setAutoresLibros] = useState([]);
@@ -21,6 +22,7 @@ const AutoresLibros = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'x-auth-token': token
             },
             body: JSON.stringify({
                 autor_id: autorId,
@@ -41,6 +43,7 @@ const AutoresLibros = () => {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'x-auth-token': token
             },
             body: JSON.stringify({
                 new_autor_id: newAutorId,
@@ -63,6 +66,10 @@ const AutoresLibros = () => {
     const handleDelete = (autor_id, libro_id) => {
         fetch(`${API_URL}/autores_libros/${autor_id}/${libro_id}`, {
             method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-auth-token': token
+            },
         })
             .then(() => {
                 setAutoresLibros(autoresLibros.filter((item) => !(item.autor_id === autor_id && item.libro_id === libro_id)));

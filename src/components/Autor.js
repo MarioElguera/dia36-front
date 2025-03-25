@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+const token = localStorage.getItem('token');
 
 const AutorList = () => {
     const [autores, setAutores] = useState([]);

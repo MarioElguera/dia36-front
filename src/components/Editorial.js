@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+const token = localStorage.getItem('token');
 
 const EditorialList = () => {
     const [editoriales, setEditoriales] = useState([]);
@@ -10,10 +11,16 @@ const EditorialList = () => {
     // Obtener todas las editoriales
     useEffect(() => {
         const fetchEditoriales = async () => {
-            const response = await fetch(`${API_URL}/editoriales`);
+            const response = await fetch(`${API_URL}/editoriales`, {
+                method: 'GET', // Opcional, ya que 'GET' es el método por defecto
+                headers: {
+                    'x-auth-token': token // Agregamos el header con el token
+                }
+            });
             const data = await response.json();
             setEditoriales(data);
         };
+
         fetchEditoriales();
     }, []);
 
@@ -26,6 +33,7 @@ const EditorialList = () => {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'x-auth-token': token
                 },
                 body: JSON.stringify(editorialForm),
             });
@@ -36,13 +44,20 @@ const EditorialList = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'x-auth-token': token
                 },
                 body: JSON.stringify(editorialForm),
             });
         }
 
         setEditorialForm({ editorial_id: '', nombre: '', pais: '' });
-        const response = await fetch(`${API_URL}/editoriales`);
+        const response = await fetch(`${API_URL}/editoriales`, {
+            method: 'GET', // Si es una solicitud GET
+            headers: {
+                'x-auth-token': token, // Aquí agregas el token
+                'Content-Type': 'application/json' // Esto es opcional dependiendo de la API
+            }
+        });
         const data = await response.json();
         setEditoriales(data);
     };
@@ -61,8 +76,15 @@ const EditorialList = () => {
     const handleDeleteEditorial = async (id) => {
         await fetch(`${API_URL}/editoriales/${id}`, {
             method: 'DELETE',
+            headers: { 'x-auth-token': token },
         });
-        const response = await fetch(`${API_URL}/editoriales`);
+        const response = await fetch(`${API_URL}/editoriales`, {
+            method: 'GET', // Si es una solicitud GET
+            headers: {
+                'x-auth-token': token, // Aquí agregas el token
+                'Content-Type': 'application/json' // Esto es opcional dependiendo de la API
+            }
+        });
         const data = await response.json();
         setEditoriales(data);
     };
